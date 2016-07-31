@@ -12,6 +12,11 @@ import java.util.function.Function;
  */
 public class Test {
     public static void main(String args[]) {
+        test1();
+        test2();
+    }
+
+    public static void test1() {
         UserDataSrc dataSrc = new UserDataSrc();
         IcTable<UserEntity, String, UserDataSrc> table = new IcTable<>(dataSrc, UserDataSrc::get);
         table.primary(new BaseIcMap<>(UserEntity::getId));
@@ -32,8 +37,8 @@ public class Test {
                 table.getIndex(getJob).inter(JobType.STUDENT));
 
         List<UserEntity> userSortByAge = table.getIndex(getAge).range(21, 19);
-
-        test2();
+        List<UserEntity> userSortByAgeAndFemale = table.getIndex(getAge).range(22, 18);
+        userSortByAgeAndFemale.retainAll(table.getIndex(getSex).inter(SexType.FEMALE));
     }
 
     public static void test2() {
@@ -48,5 +53,7 @@ public class Test {
                 table.getJobSets().inter(JobType.STUDENT));
 
         List<UserEntity> userSortByAge = table.getAgeSets().range(18, 21);
+        List<UserEntity> userSortByAgeAndFemale = table.getAgeSets().range(18, 22);
+        userSortByAgeAndFemale.retainAll(table.getSexSets().inter(SexType.FEMALE));
     }
 }
