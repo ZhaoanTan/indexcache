@@ -22,9 +22,6 @@ public class IcTable<Entity, PrimaryKey, DataSrc> {
 
     public void build() {
         Collection<Entity> data = dataGetter.apply(dataSrc);
-        if (data == null || data.isEmpty()) {
-            return;
-        }
         if (primary != null) {
             primary.build(data);
         }
