@@ -47,8 +47,11 @@ public class BaseIcMap<Entity, Field> implements Primary<Entity, Field>, IcMap<E
         }
         if (entities != null) {
             for (Entity entity : entities) {
+                if (entity == null) {
+                    continue;
+                }
                 Field k = fieldGetter.apply(entity);
-                if (entity == null || k == null) {
+                if (k == null) {
                     continue;
                 }
                 mapLocal.put(k, entity);
@@ -76,10 +79,14 @@ public class BaseIcMap<Entity, Field> implements Primary<Entity, Field>, IcMap<E
 
     @Override
     public Entity put(Entity entity) {
-        if (entity == null || fieldGetter.apply(entity) == null) {
+        if (entity == null) {
             return null;
         }
-        return map.put(fieldGetter.apply(entity), entity);
+        Field k = fieldGetter.apply(entity);
+        if (k == null) {
+            return null;
+        }
+        return map.put(k, entity);
     }
 
     @Override
