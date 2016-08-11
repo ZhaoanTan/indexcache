@@ -34,6 +34,7 @@ public class SetUtil {
         return set;
     }
 
+    @SafeVarargs
     public static <T> Set<T> inter(Set<T>... sets) {
         if (sets == null) {
             return new HashSet<>();
@@ -55,6 +56,7 @@ public class SetUtil {
         return setAll;
     }
 
+    @SafeVarargs
     public static <T> Set<T> union(Set<T>... sets) {
         if (sets == null) {
             return new HashSet<>();
