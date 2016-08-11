@@ -11,7 +11,7 @@ import java.util.Set;
 public class SetUtil {
     public static <T> Set<T> inter(Collection<Set<T>> sets) {
         if (sets == null || sets.isEmpty() || sets.contains(null)) {
-            return new HashSet<T>();
+            return new HashSet<>();
         }
         //get the min set
         Set<T> setMin = null;
@@ -28,10 +28,8 @@ public class SetUtil {
             throw new RuntimeException("setMin can not be null.");
         }
         Set<T> set = new HashSet<>(setMin);
-        boolean b = true;
         for (Set s : sets) {
-            if (b) {
-                b = false;
+            if (s == setMin) {
                 continue;
             }
             set.retainAll(s);
@@ -66,6 +64,6 @@ public class SetUtil {
         if (sets == null) {
             return new HashSet<>();
         }
-        return union(sets);
+        return union(Arrays.asList(sets));
     }
 }
