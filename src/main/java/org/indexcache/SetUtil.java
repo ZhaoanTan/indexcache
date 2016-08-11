@@ -27,8 +27,13 @@ public class SetUtil {
         if (setMin == null) {
             throw new RuntimeException("setMin can not be null.");
         }
-        Set<T> set = new HashSet<T>(setMin);
+        Set<T> set = new HashSet<>(setMin);
+        boolean b = true;
         for (Set s : sets) {
+            if (b) {
+                b = false;
+                continue;
+            }
             set.retainAll(s);
         }
         return set;
@@ -44,9 +49,9 @@ public class SetUtil {
 
     public static <T> Set<T> union(Collection<Set<T>> sets) {
         if (sets == null || sets.isEmpty()) {
-            return new HashSet<T>();
+            return new HashSet<>();
         }
-        Set<T> setAll = new HashSet<T>();
+        Set<T> setAll = new HashSet<>();
         for (Set<T> s : sets) {
             if (s == null || s.isEmpty()) {
                 continue;
