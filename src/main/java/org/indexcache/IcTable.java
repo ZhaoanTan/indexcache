@@ -67,7 +67,7 @@ public class IcTable<Entity, PrimaryKey, DataSrc> {
         }
     }
 
-    public IcMap<Entity, PrimaryKey> getPrimary() {
+    public IcSortedMap<Entity, PrimaryKey> getPrimary() {
         return primary;
     }
 

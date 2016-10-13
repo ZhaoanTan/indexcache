@@ -1,4 +1,4 @@
-import org.indexcache.BaseIcMap;
+import org.indexcache.BaseIcSortedMap;
 import org.indexcache.BaseIcSets;
 import org.indexcache.IcTable;
 import org.indexcache.SetUtil;
@@ -19,7 +19,7 @@ public class Test {
     public static void test1() {
         UserDataSrc dataSrc = new UserDataSrc();
         IcTable<UserEntity, String, UserDataSrc> table = new IcTable<>(dataSrc, UserDataSrc::get);
-        table.primary(new BaseIcMap<>(UserEntity::getId));
+        table.primary(new BaseIcSortedMap<>(UserEntity::getId));
         Function<UserEntity, SexType> getSex = UserEntity::getSex;
         Function<UserEntity, JobType> getJob = UserEntity::getJob;
         Function<UserEntity, Integer> getAge = UserEntity::getAge;

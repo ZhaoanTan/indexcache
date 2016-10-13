@@ -6,21 +6,21 @@ import java.util.function.Function;
 /**
  * Created by Zhaoan.Tan on 2016/7/10.
  */
-public class BaseIcMap<Entity, Field> implements Primary<Entity, Field>, IcMap<Entity, Field> {
+public class BaseIcSortedMap<Entity, Field> implements Primary<Entity, Field>, IcSortedMap<Entity, Field> {
     private SortedMap<Field, Entity> map;
     private Function<Entity, Field> fieldGetter;
     private Comparator<Field> fieldComparator;
     private IcTable table;
 
-    public BaseIcMap(Function<Entity, Field> fieldGetter) {
+    public BaseIcSortedMap(Function<Entity, Field> fieldGetter) {
         this.fieldGetter = fieldGetter;
-        map = Collections.synchronizedSortedMap(new TreeMap<>());
+        map = ReadWriteSortedMap.wrap(new TreeMap<>());
     }
 
-    public BaseIcMap(Function<Entity, Field> fieldGetter, Comparator<Field> fieldComparator) {
+    public BaseIcSortedMap(Function<Entity, Field> fieldGetter, Comparator<Field> fieldComparator) {
         this.fieldGetter = fieldGetter;
         this.fieldComparator = fieldComparator;
-        map = Collections.synchronizedSortedMap(new TreeMap<>(fieldComparator));
+        map = ReadWriteSortedMap.wrap(new TreeMap<>(fieldComparator));
     }
 
     @Override
@@ -41,9 +41,9 @@ public class BaseIcMap<Entity, Field> implements Primary<Entity, Field>, IcMap<E
         SortedMap<Field, Entity> mapLocal;
 
         if (fieldComparator == null) {
-            mapLocal = Collections.synchronizedSortedMap(new TreeMap<>());
+            mapLocal = ReadWriteSortedMap.wrap(new TreeMap<>());
         } else {
-            mapLocal = Collections.synchronizedSortedMap(new TreeMap<>(fieldComparator));
+            mapLocal = ReadWriteSortedMap.wrap(new TreeMap<>(fieldComparator));
         }
         if (entities != null) {
             for (Entity entity : entities) {

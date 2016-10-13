@@ -7,7 +7,7 @@ import java.util.function.Function;
 /**
  * Created by Zhaoan.Tan on 2016/7/10.
  */
-public class BaseIcFuzzy<Entity, Field> implements Index<Entity, Field>, IcFuzzy<Entity, Field>{
+public class BaseIcFuzzy<Entity, Field> implements Index<Entity, Field>, IcFuzzy<Entity, Field> {
     @Override
     public List<Entity> search(String keyWord, int start, int count) {
         return null;

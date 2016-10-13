@@ -1,4 +1,4 @@
-import org.indexcache.BaseIcMap;
+import org.indexcache.BaseIcSortedMap;
 import org.indexcache.BaseIcSets;
 import org.indexcache.IcTable;
 
@@ -11,7 +11,7 @@ import java.util.function.Function;
 public class UserTable extends IcTable<UserEntity, String, UserDataSrc> {
     public UserTable(UserDataSrc userDataSrc, Function<UserDataSrc, Collection<UserEntity>> dataGetter) {
         super(userDataSrc, dataGetter);
-        primary(new BaseIcMap<>(UserEntity::getId));
+        primary(new BaseIcSortedMap<>(UserEntity::getId));
         index(sexSets);
         index(jobSets);
         index(ageSets);

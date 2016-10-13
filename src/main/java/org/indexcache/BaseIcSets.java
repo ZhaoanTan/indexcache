@@ -7,7 +7,7 @@ import java.util.function.Function;
  * Created by Zhaoan.Tan on 2016/7/10.
  */
 public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSets<Entity, Field> {
-    private SortedMap<Field, Set<Entity>> sets = Collections.synchronizedSortedMap(new TreeMap<>());
+    private SortedMap<Field, Set<Entity>> sets = ReadWriteSortedMap.wrap(new TreeMap<>());
     private Function<Entity, Field> fieldGetter;
     private IcTable table;
     private Comparator<Field> fieldComparator;
@@ -26,9 +26,9 @@ public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSe
         SortedMap<Field, Set<Entity>> setsLocal;
 
         if (fieldComparator == null) {
-            setsLocal = Collections.synchronizedSortedMap(new TreeMap<>());
+            setsLocal = ReadWriteSortedMap.wrap(new TreeMap<>());
         } else {
-            setsLocal = Collections.synchronizedSortedMap(new TreeMap<>(fieldComparator));
+            setsLocal = ReadWriteSortedMap.wrap(new TreeMap<>(fieldComparator));
         }
         if (entities != null) {
             for (Entity entity : entities) {
@@ -39,7 +39,7 @@ public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSe
                 if (k == null) {
                     continue;
                 }
-                setsLocal.putIfAbsent(k, Collections.synchronizedSet(new HashSet<>()));
+                setsLocal.putIfAbsent(k, ReadWriteSet.wrap(new IdentitySet<>()));
                 setsLocal.get(k).add(entity);
             }
         }
@@ -71,16 +71,16 @@ public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSe
         if (k == null) {
             return false;
         }
-        sets.putIfAbsent(k, Collections.synchronizedSet(new HashSet<>()));
+        sets.putIfAbsent(k, Collections.synchronizedSet(new IdentitySet<>()));
         sets.get(k).add(entity);
         return true;
     }
 
     public Set<Entity> inter(Collection<Field> fields) {
         if (fields == null || fields.isEmpty()) {
-            return new HashSet<Entity>();
+            return new IdentitySet<>();
         }
-        Set<Set<Entity>> ss = new HashSet<Set<Entity>>();
+        Set<Set<Entity>> ss = new IdentitySet<>();
         for (Field k : fields) {
             Set<Entity> s = sets.get(k);
             if (s == null) {
@@ -98,9 +98,9 @@ public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSe
 
     public Set<Entity> union(Collection<Field> fields) {
         if (fields == null || fields.isEmpty()) {
-            return new HashSet<>();
+            return new IdentitySet<>();
         }
-        Set<Set<Entity>> ss = new HashSet<>();
+        Set<Set<Entity>> ss = new IdentitySet<>();
         for (Field k : fields) {
             Set<Entity> s = sets.get(k);
             if (s == null) {
@@ -118,7 +118,7 @@ public class BaseIcSets<Entity, Field> implements SetsIndex<Entity, Field>, IcSe
 
     @Override
     public Set<Entity> allExclude(Collection<Field> fields) {
-        Set<Entity> setAll = new HashSet<>(table.values());
+        Set<Entity> setAll = new IdentitySet<>(table.values());
         if (fields == null || fields.isEmpty()) {
             return setAll;
         }
